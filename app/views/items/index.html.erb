@@ -1,0 +1,8 @@
+<% @items.each do |item| %>
+  <%= form_for item, method: :put do |f| %>
+    <%= f.hidden_field :checked_out, value: true %>
+    <%= f.hidden_field :checked_out_last, value: Time.now %>
+    <%= f.hidden_field :processed_by_id, value: current_user.id %>
+    <%= f.submit "Check Out" %>
+  <% end %>
+<% end %>
