@@ -1,8 +1,50 @@
-<% @items.each do |item| %>
-  <%= form_for item, method: :put do |f| %>
-    <%= f.hidden_field :checked_out, value: true %>
-    <%= f.hidden_field :checked_out_last, value: Time.now %>
-    <%= f.hidden_field :processed_by_id, value: current_user.id %>
-    <%= f.submit "Check Out" %>
-  <% end %>
+<%= search_form_for @q do |f| %>
+  <%= f.label :barcode_or_name_cont %>
+  <%= f.search_field :barcode_or_name_cont %><br />
+  <%= f.label :checked_out %>
+  <%= f.check_box :checked_out_true, include_hidden: false %>
+  <%= f.submit %>
 <% end %>
+
+<table class="table table-condensed">
+  <thead>
+    <tr>
+      <th>Item ID</th>
+      <th>Name</th>
+      <th>Department</th>
+      <th>Barcode</th>
+      <th>Last Action</th>
+      <th>Processed By</th>
+      <th>Assigned To</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @items.each do |item| %>
+    <tr>
+      <td><%= item.id %></td>
+      <td><%= item.name %></td>
+      <td><%= item.department_name %></td>
+      <td><%= item.barcode %></td>
+      <td><%= item.checked_out_last if item.checked_out_last %></td>
+      <td><%= User.find(item.processed_by_id).email if item.processed_by_id %></td>
+      <% unless item.checked_out? %> 
+        <%= form_for item, method: :put do |f| %>
+          <%= f.hidden_field :checked_out, value: true %>
+          <%= f.hidden_field :checked_out_last, value: Time.now %>
+          <%= f.hidden_field :processed_by_id, value: current_user.id %>
+          <td><%= f.text_field :checked_out_to %></td> 
+          <td><%= f.submit "Check Out" %></td>
+        <% end %>
+      <% else %>
+        <%= form_for item, method: :put do |f| %> 
+          <%= f.hidden_field :checked_out, value: false %>
+          <%= f.hidden_field :returned_last, value: Time.now %>
+          <td><%= item.checked_out_to %></td>
+          <%= f.hidden_field :checked_out_to, value: nil %>
+          <td><%= f.submit "Return" %></td>
+        <% end %>
+      <% end %>  
+  <% end %>
+  </tbody>
+</table>

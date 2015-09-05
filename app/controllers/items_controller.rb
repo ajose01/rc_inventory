@@ -2,7 +2,8 @@ class ItemsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @items = Item.all
+    @q = Item.ransack(params[:q])
+    @items = @q.result
   end
 
   def new
@@ -18,8 +19,8 @@ class ItemsController < ApplicationController
   end
 
   def update
-    current_item.update_attributes(item_params)
-    render text: 'updated!'
+    flash[:notice] = "Item checked" if current_item.update_attributes(item_params)
+    redirect_to items_path
   end
 
   def destroy
@@ -32,6 +33,6 @@ class ItemsController < ApplicationController
     item ||= Item.find(params[:id])
   end
   def item_params
-    params.require(:item).permit(:checked_out, :checked_out_last, :processed_by_id)
+    params.require(:item).permit(:checked_out, :checked_out_last, :processed_by_id, :checked_out_to)
   end
 end
