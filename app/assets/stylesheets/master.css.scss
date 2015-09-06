@@ -1,5 +1,3 @@
-
-
 .navbar.navbar-default {
 	border-radius: 0;
 	background-color: #85C2FF;
@@ -7,6 +5,24 @@
     font-family: 'Lora', serif;
 }
 
-h1.static {
+.navbar.navbar-inverse {
+	border-radius: 0;
+	margin-bottom: 0px;
 	font-family: 'Lora', serif;
+}
+
+.static h1 {
+	font-family: 'Cinzel', serif;
+	font-size: 50px;
+}
+.static {
+	margin-top: 150px;
+}
+body {
+  background: url('/assets/halftone.png');
+}
+
+.inv_box {
+  height: 500px;
+  background: url('/assets/squared_metal.png')
 }
