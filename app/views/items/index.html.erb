@@ -27,7 +27,7 @@
       <td><%= item.department_name %></td>
       <td><%= item.barcode %></td>
       <td><%= item.checked_out_last if item.checked_out_last %></td>
-      <td><%= User.find(item.processed_by_id).email if item.processed_by_id %></td>
+      <td><%= item.user.email if item.user %></td>
       <% unless item.checked_out? %> 
         <%= form_for item, method: :put do |f| %>
           <%= f.hidden_field :checked_out, value: true %>
